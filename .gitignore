@@ -1,0 +1,17 @@
+# Composer files
+/vendor/
+
+# IDE files.
+.idea
+
+# macOS files.
+.DS_Store
+
+# Developer Test tools.
+phpcs.xml
+
+# Testing files
+coverage
+.phpunit*
+example.php
+tests/data/*

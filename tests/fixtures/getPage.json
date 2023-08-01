@@ -1,0 +1,14 @@
+{
+    "id": 112233,
+    "campaignId": 445566,
+    "name": "Newsletter Sign Up",
+    "title": "Newsletter Sign Up",
+    "type": "dc",
+    "subType": "EMS",
+    "clientId": 1234,
+    "createdOn": 1687515980000,
+    "modifiedOn": 1690592172000,
+    "campaignBaseUrl": "https://secure.example.com",
+    "campaignStatus": "new",
+    "defaultLocale": "en-US"
+}

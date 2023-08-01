@@ -1,0 +1,30 @@
+[
+    {
+        "id": 123456,
+        "campaignId": 987654,
+        "name": "Contact Us - General",
+        "title": "Contact Us - General",
+        "type": "dc",
+        "subType": "DCF",
+        "clientId": 1234,
+        "createdOn": 1686175361000,
+        "modifiedOn": 1690592211000,
+        "campaignBaseUrl": "https://secure.example.com",
+        "campaignStatus": "live",
+        "defaultLocale": "en-US"
+    },
+    {
+        "id": 789012,
+        "campaignId": 321098,
+        "name": "Contact Us - TV Reception",
+        "title": "Contact Us - TV Reception",
+        "type": "dc",
+        "subType": "DCF",
+        "clientId": 1234,
+        "createdOn": 1687517865000,
+        "modifiedOn": 1690592162000,
+        "campaignBaseUrl": "https://secure.example.com",
+        "campaignStatus": "live",
+        "defaultLocale": "en-US"
+    }
+]
