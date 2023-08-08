@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenPublicMedia\EngagingNetworksServices;
+namespace OpenPublicMedia\EngagingNetworksServices\Rest\Resource;
 
 use DateTime;
-use OpenPublicMedia\EngagingNetworksServices\Enums\PageStatus;
-use OpenPublicMedia\EngagingNetworksServices\Enums\PageType;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\PageStatus;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\PageType;
 
 /**
  * ENS REST API "Page" object.

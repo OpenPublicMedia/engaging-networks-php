@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenPublicMedia\EngagingNetworksServices\Enums;
+namespace OpenPublicMedia\EngagingNetworksServices\Rest\Enums;
 
 /**
  * Page types and subtypes

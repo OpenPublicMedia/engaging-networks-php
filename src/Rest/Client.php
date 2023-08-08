@@ -7,11 +7,12 @@ namespace OpenPublicMedia\EngagingNetworksServices\Rest;
 
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\GuzzleException;
-use OpenPublicMedia\EngagingNetworksServices\Enums\PageStatus;
-use OpenPublicMedia\EngagingNetworksServices\Enums\PageType;
-use OpenPublicMedia\EngagingNetworksServices\Page;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\PageStatus;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\PageType;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Exception\ErrorException;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Exception\NotFoundException;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\Page;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\PageRequestResult;
 use Psr\Http\Message\ResponseInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use RuntimeException;
@@ -144,6 +145,19 @@ class Client
     }
 
     /**
+     * Sends a POST request to the API and parses a JSON response.
+     *
+     * @param array<string, mixed> $options
+     *
+     * @return object|array<object>
+     */
+    public function post(string $endpoint, array $options = []): object|array
+    {
+        $response = $this->request('post', $endpoint, $options);
+        return json_decode($response->getBody()->getContents());
+    }
+
+    /**
      * Gets pages.
      *
      * @return Page[]
@@ -168,5 +182,17 @@ class Client
     public function getPage(int $id): Page
     {
         return Page::fromJson($this->get("page/$id"));
+    }
+
+    /**
+     * Processes a page request.
+     *
+     * @param array<string, mixed> $payload
+     *
+     * @url https://www.engagingnetworks.support/api/rest/#/operations/processPage
+     */
+    public function processPage(int $id, array $payload): PageRequestResult
+    {
+        return PageRequestResult::fromJson($this->post("page/$id/process", ['json' => $payload]));
     }
 }
