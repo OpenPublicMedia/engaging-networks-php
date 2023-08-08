@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace OpenPublicMedia\EngagingNetworksServices\Test\Rest;
 
-use OpenPublicMedia\EngagingNetworksServices\Enums\PageType;
-use OpenPublicMedia\EngagingNetworksServices\Page;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\PageRequestResultStatus;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\PageRequestResultType;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\PaymentType;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\RecurringFrequency;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\Page;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\PageType;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Exception\ErrorException;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Exception\NotFoundException;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\PageRequestResult;
 use OpenPublicMedia\EngagingNetworksServices\Test\TestCaseBase;
 
 /**
@@ -74,6 +79,17 @@ class ClientTest extends TestCaseBase
         foreach ($results as $result) {
             $this->assertInstanceOf(Page::class, $result);
         }
+    }
+
+    public function testProcessPage(): void
+    {
+        $this->mockHandler->append($this->jsonFixtureResponse('processPage'));
+        $result = $this->restClient->processPage(1234, []);
+        $this->assertInstanceOf(PageRequestResult::class, $result);
+        $this->assertEquals(PageRequestResultStatus::success, $result->getStatus());
+        $this->assertEquals(PageRequestResultType::creditSingle, $result->getType());
+        $this->assertEquals(PaymentType::visa, $result->getPaymentType());
+        $this->assertEquals(RecurringFrequency::monthly, $result->getRecurringFrequency());
     }
 
 }

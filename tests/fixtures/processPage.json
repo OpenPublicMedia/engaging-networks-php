@@ -1,0 +1,16 @@
+{
+    "status": "SUCCESS",
+    "id": 0,
+    "supporterId": 212200,
+    "supporterEmailAddress": "otto.nv@example.com",
+    "type": "CREDIT_SINGLE",
+    "transactionId": "ND8390T284740397745210972__cus_O20rrZCTq8iTpw__ch_3NFwqEHh8CrK50QS1uUEXjck",
+    "error": "string",
+    "amount": 5,
+    "currency": "GBP",
+    "recurringPayment": false,
+    "paymentType": "VISA",
+    "recurringFrequency": "MONTHLY",
+    "recurringDay": 0,
+    "createdOn": 1576167575000
+}
