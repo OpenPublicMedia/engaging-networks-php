@@ -1,0 +1,26 @@
+[
+    {
+        "id": 123456,
+        "name": "First Name",
+        "tag": "First Name",
+        "property": "firstName"
+    },
+    {
+        "id": 789011,
+        "name": "Email Address",
+        "tag": "Email Address",
+        "property": "emailAddress"
+    },
+    {
+        "id": 121314,
+        "name": "Last Name",
+        "tag": "Last Name",
+        "property": "lastName"
+    },
+    {
+        "id": 151617,
+        "name": "Age",
+        "tag": "Not Tagged",
+        "property": "NOT_TAGGED_1"
+    }
+]

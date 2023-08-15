@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1234567,
+        "questionId": 12345,
+        "name": "Cat",
+        "type": "OPT"
+    },
+    {
+        "id": 8901112,
+        "questionId": 67890,
+        "name": "Dog",
+        "type": "GEN"
+    },
+    {
+        "id": 1314151,
+        "questionId": 111213,
+        "name": "Bird",
+        "type": "CONF"
+    }
+]

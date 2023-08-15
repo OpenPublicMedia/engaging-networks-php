@@ -7,8 +7,6 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Response;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Client;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
-use ReflectionException;
 use Tochka\Cache\ArrayFileCache;
 
 class TestCaseBase extends TestCase
