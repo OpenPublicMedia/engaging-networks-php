@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1234567,
+        "questionId": 891011,
+        "name": "Question 1",
+        "type": "OPT",
+        "locale": "en-US",
+        "label": null,
+        "htmlFieldType": "checkbox",
+        "content": {
+            "data": [
+                {
+                    "selected": true,
+                    "value": "Y",
+                    "label": "<p>Question 1:</p>\n",
+                    "forId": "",
+                    "imageUrl": ""
+                }
+            ]
+        }
+    }
+]

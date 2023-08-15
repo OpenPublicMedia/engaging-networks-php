@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace OpenPublicMedia\EngagingNetworksServices\Test\Rest;
 
+use GuzzleHttp\Psr7\Response;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\PageRequestResultStatus;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\PageRequestResultType;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\PaymentType;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\RecurringFrequency;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Exception\SupporterFieldNotFoundException;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\Page;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\PageType;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Exception\ErrorException;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Exception\NotFoundException;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\PageRequestResult;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\Supporter;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\SupporterField;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\SupporterQuestion;
 use OpenPublicMedia\EngagingNetworksServices\Test\TestCaseBase;
 
 /**
@@ -90,6 +95,68 @@ class ClientTest extends TestCaseBase
         $this->assertEquals(PageRequestResultType::creditSingle, $result->getType());
         $this->assertEquals(PaymentType::visa, $result->getPaymentType());
         $this->assertEquals(RecurringFrequency::monthly, $result->getRecurringFrequency());
+    }
+
+    public function testGetSupporterFields(): void {
+        $this->mockHandler->append($this->jsonFixtureResponse('getSupporterFields'));
+        $results = $this->restClient->getSupporterFields();
+        $this->assertIsArray($results);
+        $this->assertCount(4, $results);
+        foreach ($results as $result) {
+            $this->assertInstanceOf(SupporterField::class, $result);
+        }
+        $this->assertTrue($results['First Name']->isTagged());
+        $this->assertFalse($results['Age']->isTagged());
+    }
+
+    public function testGetSupporterQuestions(): void {
+        $this->mockHandler->append($this->jsonFixtureResponse('getSupporterQuestions'));
+        $results = $this->restClient->getSupporterQuestions();
+        $this->assertIsArray($results);
+        $this->assertCount(3, $results);
+        foreach ($results as $result) {
+            $this->assertInstanceOf(SupporterQuestion::class, $result);
+            $this->assertFalse($result->hasDetails());
+        }
+    }
+
+    public function testGetSupporterQuestion(): void {
+        $this->mockHandler->append($this->jsonFixtureResponse('getSupporterQuestion'));
+        $question = $this->restClient->getSupporterQuestion(1234567);
+        $this->assertInstanceOf(SupporterQuestion::class, $question);
+        $this->assertTrue($question->hasDetails());
+
+        $this->mockHandler->append(
+            $this->jsonFixtureResponse('postAuthenticate'),
+            $this->jsonFixtureResponse('getSupporterQuestion-notFound')
+        );
+        $this->expectException(NotFoundException::class);
+        $this->restClient->getSupporterQuestion(1);
+    }
+
+    public function testGetSupporterById(): void {
+        $this->mockHandler->append($this->jsonFixtureResponse('getSupporter'));
+        $supporter = $this->restClient->getSupporterById(1234567890);
+        $this->assertInstanceOf(Supporter::class, $supporter);
+        $this->assertEquals('32', $supporter->getField('Age'));
+        $this->expectException(SupporterFieldNotFoundException::class);
+        $supporter->getField('Not found');
+
+        $this->mockHandler->append($this->jsonFixtureResponse('postAuthenticate'), new Response(204));
+        $this->expectException(NotFoundException::class);
+        $this->restClient->getSupporterById(1);
+    }
+
+    public function testGetSupporterByEmail(): void {
+        $this->mockHandler->append($this->jsonFixtureResponse('getSupporter'));
+        $supporter = $this->restClient->getSupporterByEmailAddress('first.last@example.com');
+        $this->assertInstanceOf(Supporter::class, $supporter);
+    }
+
+    public function testGetSupporterNotFound(): void {
+        $this->mockHandler->append(new Response(204));
+        $this->expectException(NotFoundException::class);
+        $this->restClient->getSupporterById(1);
     }
 
 }
