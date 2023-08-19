@@ -38,7 +38,8 @@ class ClientTest extends TestCaseBase
     /**
      * @covers ::getToken
      */
-    public function testCacheClient(): void {
+    public function testCacheClient(): void
+    {
         $this->mockHandler->append($this->jsonFixtureResponse('getPage'));
         $result1 = $this->restClientWithCache->getPage(112233);
         $this->assertInstanceOf(Page::class, $result1);
@@ -54,7 +55,8 @@ class ClientTest extends TestCaseBase
     /**
      * @covers ::request
      */
-    public function testErrorException(): void {
+    public function testErrorException(): void
+    {
         $this->mockHandler->append($this->jsonFixtureResponse('getPages-error', 404));
         $this->expectException(RequestException::class);
         $this->restClient->getPages(PageType::dc);
@@ -63,7 +65,8 @@ class ClientTest extends TestCaseBase
     /**
      * @covers ::request
      */
-    public function testNotFoundException(): void {
+    public function testNotFoundException(): void
+    {
         $this->mockHandler->append($this->jsonFixtureResponse('getPage-notFound', 404));
         $this->expectException(NotFoundException::class);
         $this->restClient->getPage(999999);
@@ -97,7 +100,8 @@ class ClientTest extends TestCaseBase
         $this->assertEquals(RecurringFrequency::monthly, $result->getRecurringFrequency());
     }
 
-    public function testGetSupporterFields(): void {
+    public function testGetSupporterFields(): void
+    {
         $this->mockHandler->append($this->jsonFixtureResponse('getSupporterFields'));
         $results = $this->restClient->getSupporterFields();
         $this->assertIsArray($results);
@@ -109,7 +113,8 @@ class ClientTest extends TestCaseBase
         $this->assertFalse($results['Age']->isTagged());
     }
 
-    public function testGetSupporterQuestions(): void {
+    public function testGetSupporterQuestions(): void
+    {
         $this->mockHandler->append($this->jsonFixtureResponse('getSupporterQuestions'));
         $results = $this->restClient->getSupporterQuestions();
         $this->assertIsArray($results);
@@ -120,7 +125,8 @@ class ClientTest extends TestCaseBase
         }
     }
 
-    public function testGetSupporterQuestion(): void {
+    public function testGetSupporterQuestion(): void
+    {
         $this->mockHandler->append($this->jsonFixtureResponse('getSupporterQuestion'));
         $question = $this->restClient->getSupporterQuestion(1234567);
         $this->assertInstanceOf(SupporterQuestion::class, $question);
@@ -134,7 +140,8 @@ class ClientTest extends TestCaseBase
         $this->restClient->getSupporterQuestion(1);
     }
 
-    public function testGetSupporterById(): void {
+    public function testGetSupporterById(): void
+    {
         $this->mockHandler->append($this->jsonFixtureResponse('getSupporter'));
         $supporter = $this->restClient->getSupporterById(1234567890);
         $this->assertInstanceOf(Supporter::class, $supporter);
@@ -147,16 +154,24 @@ class ClientTest extends TestCaseBase
         $this->restClient->getSupporterById(1);
     }
 
-    public function testGetSupporterByEmail(): void {
+    public function testGetSupporterByEmail(): void
+    {
         $this->mockHandler->append($this->jsonFixtureResponse('getSupporter'));
         $supporter = $this->restClient->getSupporterByEmailAddress('first.last@example.com');
         $this->assertInstanceOf(Supporter::class, $supporter);
     }
 
-    public function testGetSupporterNotFound(): void {
+    public function testGetSupporterNotFound(): void
+    {
         $this->mockHandler->append(new Response(204));
         $this->expectException(NotFoundException::class);
         $this->restClient->getSupporterById(1);
     }
 
+    public function testAddOrUpdateSupporter(): void
+    {
+        $this->mockHandler->append($this->jsonFixtureResponse('addOrUpdateSupporter'));
+        $id = $this->restClient->addOrUpdateSupporter('first.last@example.com');
+        $this->assertEquals(123456789, $id);
+    }
 }
