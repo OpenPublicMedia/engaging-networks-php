@@ -93,11 +93,11 @@ this project.
   - [x] [List Pages by type](https://www.engagingnetworks.support/api/rest/#/operations/listPages)
   - [x] [View page details](https://www.engagingnetworks.support/api/rest/#/operations/getPageDetails)
   - [x] [Process a page request](https://www.engagingnetworks.support/api/rest/#/operations/processPage)
-- [ ] Supporter Services
+- [x] Supporter Services
   - [x] [List available supporter fields](https://www.engagingnetworks.support/api/rest/#/operations/listSupporterFields)
   - [x] [List available supporter questions](https://www.engagingnetworks.support/api/rest/#/operations/listSupporterQuestions)
   - [x] [Retrieve details about the content of a question](https://www.engagingnetworks.support/api/rest/#/operations/viewQuestion)
   - [x] [View Supporter by Email Address](https://www.engagingnetworks.support/api/rest/#/operations/getSupporterByEmail)
-  - [ ] [Add / Update Supporter](https://www.engagingnetworks.support/api/rest/#/operations/supporterUpdate)
+  - [x] [Add / Update Supporter](https://www.engagingnetworks.support/api/rest/#/operations/supporterUpdate)
   - [x] [View Supporter by ID](https://www.engagingnetworks.support/api/rest/#/operations/supporterDetail)
   - [ ] [Supporter query](https://www.engagingnetworks.support/api/rest/#/operations/supporterQuery)

@@ -155,10 +155,8 @@ class Client
      * Sends a POST request to the API and parses a JSON response.
      *
      * @param array<string, mixed> $options
-     *
-     * @return object|array<object>
      */
-    public function post(string $endpoint, array $options = []): object|array
+    public function post(string $endpoint, array $options = []): object
     {
         $response = $this->request('post', $endpoint, $options);
         return json_decode($response->getBody()->getContents());
@@ -303,5 +301,23 @@ class Client
     ): Supporter {
         $query = self::buildSupporterQuery($emailAddress, $withMemberships, $withQuestions);
         return Supporter::fromJson($this->get("supporter", ['query' => $query]));
+    }
+
+    /**
+     * Adds or updates a supporter.
+     *
+     * @url https://www.engagingnetworks.support/api/rest/#/operations/supporterUpdate
+     *
+     * @param array<string, string> $fields
+     *   Array of field values to be upsert keyed by field name.
+     *
+     * @return int
+     *   Inserted/update supporter ID.
+     */
+    public function addOrUpdateSupporter(string $emailAddress, ?array $fields = []): int
+    {
+        $payload = [Supporter::EMAIL_ADDRESS => $emailAddress, ...$fields];
+        $result = $this->post('supporter', ['json' => $payload]);
+        return $result->id;
     }
 }

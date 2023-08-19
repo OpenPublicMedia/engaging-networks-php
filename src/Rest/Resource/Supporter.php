@@ -9,6 +9,8 @@ use OpenPublicMedia\EngagingNetworksServices\Rest\Exception\SupporterFieldNotFou
  */
 final class Supporter
 {
+    public const EMAIL_ADDRESS = 'Email Address';
+
     /**
      * @param array<string,string> $fields
      * @param array<string,mixed> $memberships
@@ -30,14 +32,14 @@ final class Supporter
         unset(
             $fields['supporterId'],
             $fields['suppressed'],
-            $fields['Email Address'],
+            $fields[self::EMAIL_ADDRESS],
             $fields['memberships]'],
             $fields['questions']
         );
         return new Supporter(
             $json->supporterId,
             $json->suppressed,
-            $json->{'Email Address'},
+            $json->{self::EMAIL_ADDRESS},
             empty($fields) ? null : $fields,
             property_exists($json, 'memberships') ? $json->memberships : null,
             property_exists($json, 'questions') ? $json->questions : null,

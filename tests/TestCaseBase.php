@@ -23,7 +23,12 @@ class TestCaseBase extends TestCase
         $this->mockHandler = new MockHandler();
         $this->restClient = new Client('https://us.example.com', '1234567890', ['handler' => $this->mockHandler]);
         $cache = new ArrayFileCache(__DIR__ . '/data', 'test.db');
-        $this->restClientWithCache = new Client('https://us.example.com', '1234567890', ['handler' => $this->mockHandler], $cache);
+        $this->restClientWithCache = new Client(
+            'https://us.example.com',
+            '1234567890',
+            ['handler' => $this->mockHandler],
+            $cache
+        );
     }
 
     /**

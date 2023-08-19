@@ -8,5 +8,6 @@
     <rule ref="PSR2" />
     <file>src/</file>
     <file>tests/</file>
-    <exclude-pattern>*/tests/*</exclude-pattern>
+    <exclude-pattern>*/tests/data/*</exclude-pattern>
+    <exclude-pattern>*/tests/fixtures/*</exclude-pattern>
 </ruleset>
