@@ -12,7 +12,7 @@ use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\RecurringFrequency;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Exception\SupporterFieldNotFoundException;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\Page;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\PageType;
-use OpenPublicMedia\EngagingNetworksServices\Rest\Exception\ErrorException;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Exception\RequestException;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Exception\NotFoundException;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\PageRequestResult;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\Supporter;
@@ -56,7 +56,7 @@ class ClientTest extends TestCaseBase
      */
     public function testErrorException(): void {
         $this->mockHandler->append($this->jsonFixtureResponse('getPages-error', 404));
-        $this->expectException(ErrorException::class);
+        $this->expectException(RequestException::class);
         $this->restClient->getPages(PageType::dc);
     }
 
