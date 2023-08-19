@@ -17,6 +17,7 @@ final class Supporter
     public function __construct(
         protected readonly int $supporterId,
         protected readonly bool $suppressed,
+        protected readonly string $emailAddress,
         protected readonly ?array $fields = null,
         protected readonly ?array $memberships = null,
         protected readonly ?array $questions = null
@@ -26,10 +27,17 @@ final class Supporter
     public static function fromJson(object $json): Supporter
     {
         $fields = (array) clone $json;
-        unset($fields['supporterId'], $fields['suppressed'], $fields['memberships]'], $fields['questions']);
+        unset(
+            $fields['supporterId'],
+            $fields['suppressed'],
+            $fields['Email Address'],
+            $fields['memberships]'],
+            $fields['questions']
+        );
         return new Supporter(
             $json->supporterId,
             $json->suppressed,
+            $json->{'Email Address'},
             empty($fields) ? null : $fields,
             property_exists($json, 'memberships') ? $json->memberships : null,
             property_exists($json, 'questions') ? $json->questions : null,
@@ -44,6 +52,11 @@ final class Supporter
     public function isSuppressed(): bool
     {
         return $this->suppressed;
+    }
+
+    public function getEmailAddress(): string
+    {
+        return $this->emailAddress;
     }
 
     /**
