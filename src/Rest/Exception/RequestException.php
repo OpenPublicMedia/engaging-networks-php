@@ -8,7 +8,7 @@ use RuntimeException;
 /**
  * ENS REST API general error exception.
  */
-class ErrorException extends RuntimeException
+class RequestException extends RuntimeException
 {
 
     private readonly ?string $developerMessage;
@@ -17,11 +17,18 @@ class ErrorException extends RuntimeException
 
     public function __construct(ResponseInterface $response)
     {
-        $details = json_decode($response->getBody()->getContents());
+        $body = $response->getBody()->getContents();
+        try {
+            $details = json_decode($body, flags: JSON_THROW_ON_ERROR);
+            $message = $response->getReasonPhrase();
+        } catch (\JsonException) {
+            // Use the body of the response if it is not JSON.
+            $message = $body;
+        }
         $this->developerMessage = $details?->developerMessage ?? null;
         $this->errorMessage = $details?->message ?? null;
         $this->errorMessageId = $details?->messageId ?? null;
-        parent::__construct($response->getReasonPhrase(), $response->getStatusCode());
+        parent::__construct($message, $response->getStatusCode());
     }
 
     public function getDeveloperMessage(): ?string

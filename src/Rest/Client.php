@@ -10,7 +10,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\PageStatus;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Enums\PageType;
-use OpenPublicMedia\EngagingNetworksServices\Rest\Exception\ErrorException;
+use OpenPublicMedia\EngagingNetworksServices\Rest\Exception\RequestException;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Exception\NotFoundException;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\Page;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\PageRequestResult;
@@ -132,7 +132,7 @@ class Client
         if ($response->getStatusCode() === 404 || $response->getStatusCode() === 204) {
             throw new NotFoundException($response);
         } elseif ($response->getStatusCode() !== 200) {
-            throw new ErrorException($response);
+            throw new RequestException($response);
         }
 
         return $response;
