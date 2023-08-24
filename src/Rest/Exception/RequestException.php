@@ -24,6 +24,7 @@ class RequestException extends RuntimeException
         } catch (\JsonException) {
             // Use the body of the response if it is not JSON.
             $message = $body;
+            $details = null;
         }
         $this->developerMessage = $details?->developerMessage ?? null;
         $this->errorMessage = $details?->message ?? null;
