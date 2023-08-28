@@ -50,6 +50,19 @@ class ClientTest extends TestCaseBase
         if (is_writable($cache_file)) {
             unlink($cache_file);
         }
+
+        $this->assertEquals(
+            'open_public_media.ens.rest.session_token',
+            $this->restClientWithCache->getTokenCacheKey()
+        );
+        $this->assertEquals(
+            'open_public_media.ens.rest.session_expire',
+            $this->restClientWithCache->getTokenExpireCacheKey()
+        );
+        $this->restClientWithCache->setTokenCacheKey('tests.token_key');
+        $this->restClientWithCache->setTokenExpireCacheKey('tests.token_key_expire');
+        $this->assertEquals('tests.token_key', $this->restClientWithCache->getTokenCacheKey());
+        $this->assertEquals('tests.token_key_expire', $this->restClientWithCache->getTokenExpireCacheKey());
     }
 
     /**

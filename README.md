@@ -56,6 +56,48 @@ $cache = new ArrayFileCache('.', 'my_awesome_cache');
 $client = new Client($base_uri, $api_key, cache: $cache);
 ```
 
+Note: ENS REST API tokens are associated with the IP address used to generate
+the token. The client provides default cache key names for the token and
+expiration data. In configurations where multiple backends with different IP
+addresses handle requests the `cache_key_token` and `cache_key_token_expire`
+parameters can be used to set the cache keys.
+
+**Server 1**
+```php
+use OpenPublicMedia\EngagingNetworksServices\Rest\Client;
+use Tochka\Cache\ArrayFileCache;
+
+$base_uri = 'https://ca.engagingnetworks.app/ens/service/';
+$api_key = '8a497fb3-e74f-4498-86bd-b7890b596bf1';
+
+$cache = new ArrayFileCache('.', 'my_awesome_cache');
+$client = new Client(
+  $base_uri,
+  $api_key,
+  cache: $cache,
+  cache_key_token: 'open_public_media.ens.rest.session_token_server_1',
+  cache_key_token_expire: 'open_public_media.ens.rest.session_expire_server_1'
+);
+```
+
+**Server 2**
+```php
+use OpenPublicMedia\EngagingNetworksServices\Rest\Client;
+use Tochka\Cache\ArrayFileCache;
+
+$base_uri = 'https://ca.engagingnetworks.app/ens/service/';
+$api_key = '8a497fb3-e74f-4498-86bd-b7890b596bf1';
+
+$cache = new ArrayFileCache('.', 'my_awesome_cache');
+$client = new Client(
+  $base_uri,
+  $api_key,
+  cache: $cache,
+  cache_key_token: 'open_public_media.ens.rest.session_token_server_2',
+  cache_key_token_expire: 'open_public_media.ens.rest.session_expire_server_2'
+);
+```
+
 #### Handling exceptions
 
 Custom exceptions are provided for 404 response and general errors. Additional
