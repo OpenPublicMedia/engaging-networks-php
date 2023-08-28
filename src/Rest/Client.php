@@ -17,8 +17,6 @@ use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\PageRequestResult;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\Supporter;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\SupporterField;
 use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\SupporterQuestion;
-use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\UntaggedSupporterField;
-use OpenPublicMedia\EngagingNetworksServices\Rest\Resource\TaggedSupporterField;
 use Psr\Http\Message\ResponseInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use RuntimeException;
@@ -32,20 +30,7 @@ use RuntimeException;
  */
 class Client
 {
-    const SESSION_EXPIRE_KEY = 'open_public_media.ens.rest.session_expire';
-    const SESSION_TOKEN_KEY = 'open_public_media.ens.rest.session_token';
-
-    protected string $apiKey;
-    /**
-     * Cache interface for storing the short-lived auth token.
-     *
-     * A PSR-16 compliant interface is preferred but any class providing
-     * `set($key, $value)` and `get($key, $default)` methods will suffice.
-     *
-     * If not provided a new token will be generated for every request.
-     */
-    protected ?object $cache;
-    protected ?GuzzleClient $client;
+    protected GuzzleClient $client;
     private ?string $token = null;
 
 
@@ -56,16 +41,49 @@ class Client
      */
     public function __construct(
         string $baseUri,
-        string $apiKey,
+        protected string $apiKey,
         array $httpClientOptions = [],
-        ?object $cache = null
+        protected ?object $cache = null,
+        protected string $cache_key_token = 'open_public_media.ens.rest.session_token',
+        protected string $cache_key_token_expire = 'open_public_media.ens.rest.session_expire',
     ) {
-        $this->apiKey = $apiKey;
-        $this->cache = $cache;
         $this->client = new GuzzleClient([
             'base_uri' => $baseUri,
             'http_errors' => false,
         ] + $httpClientOptions);
+    }
+
+
+    /**
+     * Gets the cache key used for the API token.
+     */
+    public function getTokenCacheKey(): string
+    {
+        return $this->cache_key_token;
+    }
+
+    /**
+     * Sets the cache key used for the API token.
+     */
+    public function setTokenCacheKey(string $key): void
+    {
+        $this->cache_key_token = $key;
+    }
+
+    /**
+     * Gets the cache key used for the API token expiration.
+     */
+    public function getTokenExpireCacheKey(): string
+    {
+        return $this->cache_key_token_expire;
+    }
+
+    /**
+     * Sets the cache key used for the API token expiration.
+     */
+    public function setTokenExpireCacheKey(string $key): void
+    {
+        $this->cache_key_token_expire = $key;
     }
 
     /**
@@ -79,14 +97,14 @@ class Client
             $token = $this->token;
         } else {
             try {
-                $token = $this->cache?->get(self::SESSION_TOKEN_KEY);
+                $token = $this->cache?->get($this->getTokenCacheKey());
             } catch (InvalidArgumentException $e) {
                 throw new RuntimeException($e->getMessage(), $e->getCode(), $e);
             }
         }
 
         try {
-            $expires = $this->cache?->get(self::SESSION_EXPIRE_KEY, 0);
+            $expires = $this->cache?->get($this->getTokenExpireCacheKey(), 0);
             if (time() >= $expires - 300) {
                 $token = null;
             }
@@ -99,8 +117,8 @@ class Client
             $data = json_decode($response->getBody()->getContents(), true);
             $token = $data['ens-auth-token'];
             $expires = time() + ($data['expires']/1000);
-            $this->cache?->set(self::SESSION_EXPIRE_KEY, $expires);
-            $this->cache?->set(self::SESSION_TOKEN_KEY, $token);
+            $this->cache?->set($this->getTokenExpireCacheKey(), $expires);
+            $this->cache?->set($this->getTokenCacheKey(), $token);
         }
 
         if ($token != $this->token) {
